@@ -71,22 +71,22 @@ jobs:
         python -m pip list
         java -version
 
-    - name: Check out my other private repo
+    - name: Check out scikit-hep/awkward
       uses: actions/checkout@master
       with:
         repository: scikit-hep/awkward
 
-    - name: Check out my other private repo
+    - name: Check out dask-contrib/dask-awkward
       uses: actions/checkout@master
       with:
         repository: dask-contrib/dask-awkward
 
-    - name: Check out my other private repo
+    - name: Check out scikit-hep/uproot5
       uses: actions/checkout@master
       with:
         repository: scikit-hep/uproot5
 
-    - name: Check out my other private repo
+    - name: Check out CoffeaTeam/coffea
       uses: actions/checkout@master
       with:
         repository: CoffeaTeam/coffea
