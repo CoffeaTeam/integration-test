@@ -41,42 +41,47 @@ jobs:
         conda-solver: "libmamba"
         activate-environment: test
 
-    # - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
-    #   uses: actions/setup-java@v4
-    #   with:
-    #     java-version: ${{ matrix.java-version }}
-    #     distribution: ${{ matrix.java-distribution }}
+    - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: ${{ matrix.java-distribution }}
 
-    # - name: Dependencies (Linux only)
-    #   if: matrix.os == 'ubuntu-latest'
-    #   run: |
-    #     python -m pip install --upgrade pip setuptools wheel
-    #     python -m pip install dask[array,dataframe,distributed,diagnostics]
-    #     python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-    #     python -m pip install xgboost
-    #     python -m pip install tritonclient[grpc,http]
-    #     python -m pip list
-    #     java -version
+    - name: Dependencies (Linux only)
+      if: matrix.os == 'ubuntu-latest'
+      shell: bash -el {0}
+      run: |
+        conda install root
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install dask[array,dataframe,distributed,diagnostics]
+        python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        python -m pip install xgboost
+        python -m pip install tritonclient[grpc,http]
+        python -m pip list
+        java -version
 
-    # - name: Dependencies (MacOS only)
-    #   if: matrix.os == 'macOS-latest'
-    #   run: |
-    #     python -m pip install --upgrade pip setuptools wheel
-    #     python -m pip install dask[array,dataframe,distributed,diagnostics]
-    #     python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-    #     python -m pip install xgboost
-    #     python -m pip list
-    #     java -version
+    - name: Dependencies (MacOS only)
+      if: matrix.os == 'macOS-latest'
+      shell: bash -el {0}
+      run: |
+        conda install root
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install dask[array,dataframe,distributed,diagnostics]
+        python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        python -m pip install xgboost
+        python -m pip list
+        java -version
 
-    # - name: Dependencies (Windows only)
-    #   if: matrix.os == 'windows-latest'
-    #   run: |
-    #     python -m pip install --upgrade pip setuptools wheel
-    #     python -m pip install dask[array,dataframe,distributed,diagnostics]
-    #     python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-    #     python -m pip install xgboost
-    #     python -m pip list
-    #     java -version
+    - name: Dependencies (Windows only)
+      if: matrix.os == 'windows-latest'
+      shell: bash -el {0}
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install dask[array,dataframe,distributed,diagnostics]
+        python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        python -m pip install xgboost
+        python -m pip list
+        java -version
 
     - name: Clone scikit-hep/awkward
       uses: actions/checkout@v4
@@ -85,91 +90,79 @@ jobs:
         path: repo-awkward
         submodules: true
 
-    # - name: Clone dask-contrib/dask-awkward
-    #   uses: actions/checkout@v4
-    #   with:
-    #     repository: dask-contrib/dask-awkward
-    #     path: repo-dask-awkward
+    - name: Clone dask-contrib/dask-awkward
+      uses: actions/checkout@v4
+      with:
+        repository: dask-contrib/dask-awkward
+        path: repo-dask-awkward
 
-    # - name: Clone scikit-hep/uproot5
-    #   uses: actions/checkout@v4
-    #   with:
-    #     repository: scikit-hep/uproot5
-    #     path: repo-uproot5
+    - name: Clone scikit-hep/uproot5
+      uses: actions/checkout@v4
+      with:
+        repository: scikit-hep/uproot5
+        path: repo-uproot5
 
-    # - name: Clone CoffeaTeam/coffea
-    #   uses: actions/checkout@v4
-    #   with:
-    #     repository: CoffeaTeam/coffea
-    #     path: repo-coffea
+    - name: Clone CoffeaTeam/coffea
+      uses: actions/checkout@v4
+      with:
+        repository: CoffeaTeam/coffea
+        path: repo-coffea
 
     - name: Build scikit-hep/awkward
       shell: bash -el {0}
       run: |
         cd repo-awkward
-        echo "which python"
-        which python
-        echo "which pip"
-        which pip
-        echo "conda info"
-        conda info
-        echo "conda env list"
-        conda env list
         pipx run nox -s prepare -- --headers --signatures --tests
         python -m pip install -r requirements-test.txt
         python -m pip install -vv ./awkward-cpp
         python -m pip install .[test]
-        echo "conda list"
-        conda list
         cd ..
 
-    # - name: Build dask-contrib/dask-awkward
-    #   run: |
-    #     cd repo-dask-awkward
-    #     python -m pip install .[complete,test]
-    #     cd ..
+    - name: Build dask-contrib/dask-awkward
+      shell: bash -el {0}
+      run: |
+        cd repo-dask-awkward
+        python -m pip install .[complete,test]
+        cd ..
 
-    # - name: Build scikit-hep/uproot5
-    #   run: |
-    #     cd repo-uproot5
-    #     python -m pip install .[test,dev]
-    #     cd ..
+    - name: Build scikit-hep/uproot5
+      shell: bash -el {0}
+      run: |
+        cd repo-uproot5
+        python -m pip install .[test,dev]
+        cd ..
 
-    # - name: Build CoffeaTeam/coffea
-    #   run: |
-    #     cd repo-coffea
-    #     python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
-    #     cd ..
+    - name: Build CoffeaTeam/coffea
+      shell: bash -el {0}
+      run: |
+        cd repo-coffea
+        python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
+        cd ..
 
     - name: Test scikit-hep/awkward
       shell: bash -el {0}
       run: |
         cd repo-awkward
-        echo "which python"
-        which python
-        echo "which pip"
-        which pip
-        echo "conda info"
-        conda info
-        echo "conda env list"
-        conda env list
         python -m pytest -vv -rs tests
         cd ..
 
-    # - name: Test dask-contrib/dask-awkward
-    #   run: |
-    #     cd repo-dask-awkward
-    #     python -m pytest -vv -rs tests
-    #     cd ..
+    - name: Test dask-contrib/dask-awkward
+      shell: bash -el {0}
+      run: |
+        cd repo-dask-awkward
+        python -m pytest -vv -rs tests
+        cd ..
 
-    # - name: Test scikit-hep/uproot5
-    #   run: |
-    #     cd repo-uproot5
-    #     python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
-    #     cd ..
+    - name: Test scikit-hep/uproot5
+      shell: bash -el {0}
+      run: |
+        cd repo-uproot5
+        python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
+        cd ..
 
-    # - name: Test CoffeaTeam/coffea
-    #   run: |
-    #     cd repo-coffea
-    #     echo "Which Coffea tests should we run?"
-    #     cd ..
+    - name: Test CoffeaTeam/coffea
+      shell: bash -el {0}
+      run: |
+        cd repo-coffea
+        echo "Which Coffea tests should we run?"
+        cd ..
