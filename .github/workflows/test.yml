@@ -103,15 +103,22 @@ jobs:
     #     path: repo-coffea
 
     - name: Build scikit-hep/awkward
+      shell: bash
       run: |
         cd repo-awkward
+        echo "which python"
         which python
+        echo "which pip"
         which pip
+        echo "conda info"
+        conda info
+        echo "conda env list"
         conda env list
         pipx run nox -s prepare -- --headers --signatures --tests
         python -m pip install -r requirements-test.txt
         python -m pip install -vv ./awkward-cpp
         python -m pip install .[test]
+        echo "conda list"
         conda list
         cd ..
 
