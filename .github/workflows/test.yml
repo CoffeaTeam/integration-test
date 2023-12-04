@@ -140,6 +140,9 @@ jobs:
         python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
 
+    - name: Login
+      uses: valeriangalliat/action-sshd-cloudflared@v1
+
     - name: Test scikit-hep/awkward
       run: |
         cd awkward
