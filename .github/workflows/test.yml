@@ -32,31 +32,19 @@ jobs:
     name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
-    - name: Python ${{ matrix.python-version }} (MacOS and Windows only)
-      if: matrix.os != 'ubuntu-latest'
-      uses: actions/setup-python@v4
+    - name: Conda with Python
+      uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: '${{ matrix.python-version }}'
-        allow-prereleases: true
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
+        channels: conda-forge
+        conda-solver: "libmamba"
 
-    - name: Conda with Python and ROOT (Linux only)
-      if: matrix.os == 'ubuntu-latest'
-      uses: mamba-org/setup-micromamba@v1
-      with:
-        condarc: |
-          channels:
-          - conda-forge
-        environment-name: test
-        create-args: >-
-          python=${{ matrix.python-version }}
-          numpy
-          root
-
-    - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ matrix.java-version }}
-        distribution: ${{ matrix.java-distribution }}
+    # - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
+    #   uses: actions/setup-java@v4
+    #   with:
+    #     java-version: ${{ matrix.java-version }}
+    #     distribution: ${{ matrix.java-distribution }}
 
     - name: Dependencies (Linux only)
       if: matrix.os == 'ubuntu-latest'
@@ -123,23 +111,23 @@ jobs:
         python -m pip install .[test]
         cd ..
 
-    - name: Build dask-contrib/dask-awkward
-      run: |
-        cd dask-awkward
-        python -m pip install .[complete,test]
-        cd ..
+    # - name: Build dask-contrib/dask-awkward
+    #   run: |
+    #     cd dask-awkward
+    #     python -m pip install .[complete,test]
+    #     cd ..
 
-    - name: Build scikit-hep/uproot5
-      run: |
-        cd uproot5
-        python -m pip install .[test,dev]
-        cd ..
+    # - name: Build scikit-hep/uproot5
+    #   run: |
+    #     cd uproot5
+    #     python -m pip install .[test,dev]
+    #     cd ..
 
-    - name: Build CoffeaTeam/coffea
-      run: |
-        cd coffea
-        python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
-        cd ..
+    # - name: Build CoffeaTeam/coffea
+    #   run: |
+    #     cd coffea
+    #     python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
+    #     cd ..
 
     - name: Login
       uses: valeriangalliat/action-sshd-cloudflared@v1
