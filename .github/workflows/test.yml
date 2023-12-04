@@ -107,7 +107,6 @@ jobs:
       shell: bash -el {0}
       run: |
         cd repo-awkward
-        conda activate test
         echo "which python"
         which python
         echo "which pip"
@@ -142,17 +141,20 @@ jobs:
     #     python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
     #     cd ..
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        limit-access-to-actor: false
-        timeout-minutes: 15
-
-    # - name: Test scikit-hep/awkward
-    #   run: |
-    #     cd repo-awkward
-    #     python -m pytest -vv -rs tests
-    #     cd ..
+    - name: Test scikit-hep/awkward
+      shell: bash -el {0}
+      run: |
+        cd repo-awkward
+        echo "which python"
+        which python
+        echo "which pip"
+        which pip
+        echo "conda info"
+        conda info
+        echo "conda env list"
+        conda env list
+        python -m pytest -vv -rs tests
+        cd ..
 
     # - name: Test dask-contrib/dask-awkward
     #   run: |
