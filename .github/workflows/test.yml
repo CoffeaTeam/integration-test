@@ -139,6 +139,13 @@ jobs:
         python -m pip install --pre -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
 
+    - name: Show all versions
+      shell: bash -el {0}
+      run: |
+        conda info
+        conda list
+        python -c 'import awkward, dask_awkward, uproot, coffea; print(f"{awkward.__version__ = }\n{dask_awkward.__version__ = }\n{uproot.__version__ = }\n{coffea.__version__ = }")'
+
     - name: Test scikit-hep/awkward
       shell: bash -el {0}
       run: |
