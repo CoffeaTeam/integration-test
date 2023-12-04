@@ -26,7 +26,7 @@ jobs:
     name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
-    - name: 'Python ${{ matrix.python-version }}' (MacOS and Windows)
+    - name: Python ${{ matrix.python-version }} (MacOS and Windows)
       if: matrix.os != 'ubuntu-latest'
       uses: actions/setup-python@v4
       with:
@@ -34,7 +34,7 @@ jobs:
         architecture: 'x86'
         allow-prereleases: true
 
-    - name: Set up Conda with Python and ROOT (Linux only)
+    - name: Conda with Python and ROOT (Linux only)
       if: matrix.os == 'ubuntu-latest'
       uses: mamba-org/setup-micromamba@v1
       with:
@@ -47,13 +47,13 @@ jobs:
           numpy
           root
 
-    - name: Set up JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
+    - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
       uses: actions/setup-java@v4
       with:
         java-version: ${{ matrix.java-version }}
         distribution: ${{ matrix.java-distribution }}
 
-    - name: Install dependencies (Linux)
+    - name: Dependencies (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
         python -m pip install --upgrade pip setuptools wheel
@@ -63,7 +63,7 @@ jobs:
         python -m pip list
         java -version
 
-    - name: Install dependencies (MacOS)
+    - name: Dependencies (MacOS)
       if: matrix.os == 'macOS-latest'
       run: |
         python -m pip install --upgrade pip setuptools wheel
@@ -72,7 +72,7 @@ jobs:
         python -m pip list
         java -version
 
-    - name: Install dependencies (Windows)
+    - name: Dependencies (Windows)
       if: matrix.os == 'windows-latest'
       run: |
         python -m pip install --upgrade pip setuptools wheel
@@ -81,26 +81,26 @@ jobs:
         python -m pip list
         java -version
 
-    - name: Check out scikit-hep/awkward
+    - name: Clone scikit-hep/awkward
       uses: actions/checkout@v4
       with:
         repository: scikit-hep/awkward
         path: awkward
         submodules: true
 
-    - name: Check out dask-contrib/dask-awkward
+    - name: Clone dask-contrib/dask-awkward
       uses: actions/checkout@v4
       with:
         repository: dask-contrib/dask-awkward
         path: dask-awkward
 
-    - name: Check out scikit-hep/uproot5
+    - name: Clone scikit-hep/uproot5
       uses: actions/checkout@v4
       with:
         repository: scikit-hep/uproot5
         path: uproot5
 
-    - name: Check out CoffeaTeam/coffea
+    - name: Clone CoffeaTeam/coffea
       uses: actions/checkout@v4
       with:
         repository: CoffeaTeam/coffea
