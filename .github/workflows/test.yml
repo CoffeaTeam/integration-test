@@ -26,7 +26,16 @@ jobs:
     name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
-    - name: Set up Conda with Python and ROOT
+    - name: 'Python ${{ matrix.python-version }}' (MacOS and Windows)
+      if: matrix.os != 'ubuntu-latest'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '${{ matrix.python-version }}'
+        architecture: 'x86'
+        allow-prereleases: true
+
+    - name: Set up Conda with Python and ROOT (Linux only)
+      if: matrix.os == 'ubuntu-latest'
       uses: mamba-org/setup-micromamba@v1
       with:
         condarc: |
