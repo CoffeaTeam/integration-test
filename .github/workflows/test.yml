@@ -47,7 +47,6 @@ jobs:
         python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         python -m pip install xgboost
         python -m pip install tritonclient[grpc,http]
-        python -m pip install -q -e '.[dev,parsl,dask,spark]' --upgrade --upgrade-strategy eager
         python -m pip list
         java -version
 
@@ -57,7 +56,6 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         python -m pip install xgboost
-        python -m pip install -q -e '.[dev,dask,spark]' --upgrade --upgrade-strategy eager
         python -m pip list
         java -version
 
@@ -67,22 +65,21 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         python -m pip install xgboost
-        python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         python -m pip list
         java -version
 
     - name: Check out scikit-hep/awkward
-      uses: actions/checkout@master
+      uses: actions/checkout@main
       with:
         repository: scikit-hep/awkward
 
     - name: Check out dask-contrib/dask-awkward
-      uses: actions/checkout@master
+      uses: actions/checkout@main
       with:
         repository: dask-contrib/dask-awkward
 
     - name: Check out scikit-hep/uproot5
-      uses: actions/checkout@master
+      uses: actions/checkout@main
       with:
         repository: scikit-hep/uproot5
 
