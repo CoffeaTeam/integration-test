@@ -105,10 +105,14 @@ jobs:
     - name: Build scikit-hep/awkward
       run: |
         cd repo-awkward
+        which python
+        which pip
+        conda env list
         pipx run nox -s prepare -- --headers --signatures --tests
         python -m pip install -r requirements-test.txt
         python -m pip install -vv ./awkward-cpp
         python -m pip install .[test]
+        conda list
         cd ..
 
     # - name: Build dask-contrib/dask-awkward
@@ -129,8 +133,11 @@ jobs:
     #     python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
     #     cd ..
 
-    - name: Login
-      uses: valeriangalliat/action-sshd-cloudflared@v1
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: false
+        timeout-minutes: 15
 
     # - name: Test scikit-hep/awkward
     #   run: |
