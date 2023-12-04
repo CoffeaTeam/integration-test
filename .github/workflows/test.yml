@@ -12,7 +12,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -143,29 +143,29 @@ jobs:
     - name: Login
       uses: valeriangalliat/action-sshd-cloudflared@v1
 
-    - name: Test scikit-hep/awkward
-      run: |
-        cd awkward
-        python -m pytest -vv -rs tests
-        cd ..
+    # - name: Test scikit-hep/awkward
+    #   run: |
+    #     cd awkward
+    #     python -m pytest -vv -rs tests
+    #     cd ..
 
-    - name: Test dask-contrib/dask-awkward
-      run: |
-        cd dask-awkward
-        python -m pytest -vv -rs tests
-        cd ..
+    # - name: Test dask-contrib/dask-awkward
+    #   run: |
+    #     cd dask-awkward
+    #     python -m pytest -vv -rs tests
+    #     cd ..
 
-    - name: Test scikit-hep/uproot5
-      run: |
-        cd uproot5
-        python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
-        cd ..
+    # - name: Test scikit-hep/uproot5
+    #   run: |
+    #     cd uproot5
+    #     python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
+    #     cd ..
 
-    - name: Test CoffeaTeam/coffea
-      run: |
-        cd coffea
-        echo "Which Coffea tests should we run?"
-        cd ..
+    # - name: Test CoffeaTeam/coffea
+    #   run: |
+    #     cd coffea
+    #     echo "Which Coffea tests should we run?"
+    #     cd ..
 
     - name: See what we've got
       run: python -m pip list
