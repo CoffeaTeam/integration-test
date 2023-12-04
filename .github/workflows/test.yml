@@ -113,30 +113,30 @@ jobs:
       run: |
         cd repo-awkward
         pipx run nox -s prepare -- --headers --signatures --tests
-        python -m pip install -r requirements-test.txt
-        python -m pip install -vv ./awkward-cpp
-        python -m pip install .[test]
+        python -m pip install --pre -r requirements-test.txt
+        python -m pip install --pre -vv ./awkward-cpp
+        python -m pip install --pre .[test]
         cd ..
 
     - name: Build dask-contrib/dask-awkward
       shell: bash -el {0}
       run: |
         cd repo-dask-awkward
-        python -m pip install .[complete,test]
+        python -m pip install --pre .[complete,test]
         cd ..
 
     - name: Build scikit-hep/uproot5
       shell: bash -el {0}
       run: |
         cd repo-uproot5
-        python -m pip install .[test,dev]
+        python -m pip install --pre .[test,dev]
         cd ..
 
     - name: Build CoffeaTeam/coffea
       shell: bash -el {0}
       run: |
         cd repo-coffea
-        python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
+        python -m pip install --pre -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
 
     - name: Test scikit-hep/awkward
