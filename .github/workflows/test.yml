@@ -1,3 +1,8 @@
+# https://github.com/scikit-hep/awkward/blob/main/.github/workflows/test.yml
+# https://github.com/dask-contrib/dask-awkward/blob/main/.github/workflows/pypi-tests.yml
+# https://github.com/scikit-hep/uproot5/blob/main/.github/workflows/build-test.yml
+# https://github.com/CoffeaTeam/coffea/blob/master/.github/workflows/ci.yml
+
 name: Test
 
 on:
@@ -133,6 +138,30 @@ jobs:
       run: |
         cd coffea
         python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
+        cd ..
+
+    - name: Test scikit-hep/awkward
+      run: |
+        cd awkward
+        python -m pytest -vv -rs tests
+        cd ..
+
+    - name: Test dask-contrib/dask-awkward
+      run: |
+        cd dask-awkward
+        python -m pytest -vv -rs tests
+        cd ..
+
+    - name: Test scikit-hep/uproot5
+      run: |
+        cd uproot5
+        python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
+        cd ..
+
+    - name: Test CoffeaTeam/coffea
+      run: |
+        cd coffea
+        echo "Which Coffea tests should we run?"
         cd ..
 
     - name: See what we've got
