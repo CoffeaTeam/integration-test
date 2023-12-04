@@ -81,30 +81,30 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: scikit-hep/awkward
-        path: awkward
+        path: repo-awkward
         submodules: true
 
     - name: Clone dask-contrib/dask-awkward
       uses: actions/checkout@v4
       with:
         repository: dask-contrib/dask-awkward
-        path: dask-awkward
+        path: repo-dask-awkward
 
     - name: Clone scikit-hep/uproot5
       uses: actions/checkout@v4
       with:
         repository: scikit-hep/uproot5
-        path: uproot5
+        path: repo-uproot5
 
     - name: Clone CoffeaTeam/coffea
       uses: actions/checkout@v4
       with:
         repository: CoffeaTeam/coffea
-        path: coffea
+        path: repo-coffea
 
     - name: Build scikit-hep/awkward
       run: |
-        cd awkward
+        cd repo-awkward
         pipx run nox -s prepare -- --headers --signatures --tests
         python -m pip install -r requirements-test.txt
         python -m pip install -vv ./awkward-cpp
@@ -113,51 +113,48 @@ jobs:
 
     # - name: Build dask-contrib/dask-awkward
     #   run: |
-    #     cd dask-awkward
+    #     cd repo-dask-awkward
     #     python -m pip install .[complete,test]
     #     cd ..
 
     # - name: Build scikit-hep/uproot5
     #   run: |
-    #     cd uproot5
+    #     cd repo-uproot5
     #     python -m pip install .[test,dev]
     #     cd ..
 
     # - name: Build CoffeaTeam/coffea
     #   run: |
-    #     cd coffea
+    #     cd repo-coffea
     #     python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
     #     cd ..
 
-    - name: Login
-      uses: valeriangalliat/action-sshd-cloudflared@v1
-
-    - name: Wait
-      run: sleep 600
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: false
+        timeout-minutes: 15
 
     # - name: Test scikit-hep/awkward
     #   run: |
-    #     cd awkward
+    #     cd repo-awkward
     #     python -m pytest -vv -rs tests
     #     cd ..
 
     # - name: Test dask-contrib/dask-awkward
     #   run: |
-    #     cd dask-awkward
+    #     cd repo-dask-awkward
     #     python -m pytest -vv -rs tests
     #     cd ..
 
     # - name: Test scikit-hep/uproot5
     #   run: |
-    #     cd uproot5
+    #     cd repo-uproot5
     #     python -m pytest -vv tests --reruns 3 --reruns-delay 30 --only-rerun "(?i)http|timeout|connection|socket"
     #     cd ..
 
     # - name: Test CoffeaTeam/coffea
     #   run: |
-    #     cd coffea
+    #     cd repo-coffea
     #     echo "Which Coffea tests should we run?"
     #     cd ..
-
-    - name: See what we've got
-      run: python -m pip list
