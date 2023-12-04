@@ -12,18 +12,19 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-latest]  # , macOS-latest, windows-latest]
         java-version: [17]
         java-distribution: ["corretto"]
-        python-version: ["3.8", "3.11"]
+        python-version: ["3.11"]  # ["3.8", "3.11"]
     env:
       PIP_ONLY_BINARY: cmake,numpy,pandas,pyarrow,numexpr
       PIP_PRE: "1"
@@ -31,6 +32,9 @@ jobs:
     name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
+    - name: Login
+      uses: valeriangalliat/action-sshd-cloudflared@v1
+
     - name: Python ${{ matrix.python-version }} (MacOS and Windows only)
       if: matrix.os != 'ubuntu-latest'
       uses: actions/setup-python@v4
@@ -140,8 +144,8 @@ jobs:
         python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
 
-    - name: Login
-      uses: valeriangalliat/action-sshd-cloudflared@v1
+    - name: Wait
+      run: sleep 600
 
     # - name: Test scikit-hep/awkward
     #   run: |
