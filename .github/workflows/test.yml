@@ -21,10 +21,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]  # , macOS-latest, windows-latest]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         java-version: [17]
         java-distribution: ["corretto"]
-        python-version: ["3.11"]  # ["3.8", "3.11"]
+        python-version: ["3.8", "3.11"]
     env:
       PIP_ONLY_BINARY: cmake,numpy,pandas,pyarrow,numexpr
       PIP_PRE: "1"
