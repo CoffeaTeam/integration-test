@@ -113,21 +113,27 @@ jobs:
         cd awkward
         pipx run nox -s prepare -- --headers --signatures --tests
         python -m pip install -r requirements-test.txt
-        python -m pip install ./awkward-cpp
-        python -m pip install .[test]
-        cd ..
-
-    - name: Build scikit-hep/uproot5
-      run: |
-        cd uproot5
+        python -m pip install -vv ./awkward-cpp
         python -m pip install .[test]
         cd ..
 
     - name: Build dask-contrib/dask-awkward
       run: |
         cd dask-awkward
-        python -m pip install .[test]
+        python -m pip install .[complete,test]
+        cd ..
+
+    - name: Build scikit-hep/uproot5
+      run: |
+        cd uproot5
+        python -m pip install .[test,dev]
+        cd ..
+
+    - name: Build CoffeaTeam/coffea
+      run: |
+        cd coffea
+        python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
 
     - name: See what we've got
-      run: pwd ; ls -R ; python -m pip list
+      run: python -m pip list
