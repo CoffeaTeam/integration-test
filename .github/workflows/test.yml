@@ -32,9 +32,6 @@ jobs:
     name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
-    - name: Login
-      uses: valeriangalliat/action-sshd-cloudflared@v1
-
     - name: Python ${{ matrix.python-version }} (MacOS and Windows only)
       if: matrix.os != 'ubuntu-latest'
       uses: actions/setup-python@v4
@@ -143,6 +140,9 @@ jobs:
         cd coffea
         python -m pip install -q -e '.[dev,dask]' --upgrade --upgrade-strategy eager
         cd ..
+
+    - name: Login
+      uses: valeriangalliat/action-sshd-cloudflared@v1
 
     - name: Wait
       run: sleep 600
