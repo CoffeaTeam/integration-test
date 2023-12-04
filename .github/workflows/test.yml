@@ -39,6 +39,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         channels: conda-forge
         conda-solver: "libmamba"
+        activate-environment: test
 
     # - name: JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
     #   uses: actions/setup-java@v4
@@ -106,6 +107,7 @@ jobs:
       shell: bash
       run: |
         cd repo-awkward
+        conda activate test
         echo "which python"
         which python
         echo "which pip"
