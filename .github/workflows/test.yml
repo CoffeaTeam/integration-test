@@ -19,20 +19,24 @@ jobs:
         java-version: [17]
         java-distribution: ["corretto"]
         python-version: ["3.8", "3.11"]
-        architecture: ["x64"]
     env:
       PIP_ONLY_BINARY: cmake,numpy,pandas
       PIP_PRE: "1"
 
-    name: test (${{ matrix.os }}, ${{ matrix.architectur }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
+    name: test (${{ matrix.os }}) - Python ${{ matrix.python-version }}, JDK${{ matrix.java-version }}
 
     steps:
-    - name: 'Python ${{ matrix.python-version }}'
-      uses: actions/setup-python@v4
+    - name: Set up Conda with Python and ROOT
+      uses: mamba-org/setup-micromamba@v1
       with:
-        python-version: '${{ matrix.python-version }}'
-        architecture: '${{ matrix.architecture }}'
-        allow-prereleases: true
+        condarc: |
+          channels:
+          - conda-forge
+        environment-name: test
+        create-args: >-
+          python=${{ matrix.python-version }}
+          numpy
+          root
 
     - name: Set up JDK ${{ matrix.java-distribution }}/${{ matrix.java-version }}
       uses: actions/setup-java@v4
@@ -69,24 +73,29 @@ jobs:
         java -version
 
     - name: Check out scikit-hep/awkward
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
         repository: scikit-hep/awkward
+        path: awkward
+        submodules: true
 
     - name: Check out dask-contrib/dask-awkward
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
         repository: dask-contrib/dask-awkward
+        path: dask-awkward
 
     - name: Check out scikit-hep/uproot5
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
       with:
         repository: scikit-hep/uproot5
+        path: uproot5
 
     - name: Check out CoffeaTeam/coffea
-      uses: actions/checkout@master
+      uses: actions/checkout@v4
       with:
         repository: CoffeaTeam/coffea
+        path: coffea
 
     - name: See what we've got
       run: pwd ; ls -R
